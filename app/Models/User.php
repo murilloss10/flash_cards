@@ -64,4 +64,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function user_test_lists()
+    {
+        return $this->hasMany(UserTestList::class);
+    }
 }

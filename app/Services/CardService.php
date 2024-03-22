@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Card;
-use Illuminate\Support\Facades\Request;
-use UnexpectedValueException;
+use Illuminate\Http\Request;
+use Exception;
 
 class CardService
 {
@@ -13,23 +13,38 @@ class CardService
      */
     private $card;
 
-    public function __construct(Card $card) {
+    /**
+     * @var TestListCardService
+     */
+    private $testListCardService;
+
+    public function __construct(Card $card, TestListCardService $testListCardService)
+    {
         $this->card = $card;
+        $this->testListCardService = $testListCardService;
     }
 
-    public function create(Request $request) : string
+    public function create(Request $request) : array
     {
         try {
             $data = $this->mountArray($request);
 
             if (!$data)
-                throw new UnexpectedValueException('Valores não correspondem.');
+                throw new Exception('Valores não correspondem.');
 
-            $this->card->create($data);
+            $newCard = $this->card->create($data);
 
-            return 'Card criado com sucesso!';
+            $this->testListCardService->create($request->test_list_id, $newCard->id);
+
+            return [
+                'status' => 'success',
+                'message' => 'Card criado com sucesso!'
+            ];
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
         }
     }
 
@@ -43,19 +58,29 @@ class CardService
         return $this->card->find($id);
     }
 
-    public function update(Request $request, Card $cardToBeUpdated) : string
+    public function update(Request $request) : array
     {
         try {
+            $cardToBeUpdated = $this->findById($request->card_id);
+            if (!$cardToBeUpdated)
+                throw new Exception('Card não encontrado.');
+
             $data = $this->mountArray($request);
 
             if (!$data)
-                throw new UnexpectedValueException('Valores não correspondem.');
+                throw new Exception('Valores não correspondem.');
 
             $cardToBeUpdated->update($data);
 
-            return 'Card atualizado com sucesso!';
+            return [
+                'status' => 'success',
+                'message' => 'Card atualizado com sucesso!'
+            ];
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
         }
     }
 
@@ -82,5 +107,4 @@ class CardService
             return [];
         }
     }
-
 }

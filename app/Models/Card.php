@@ -16,4 +16,16 @@ class Card extends Model
         'question',
         'question_answer',
     ];
+
+    public $appends = ['updatedDate'];
+
+    public function getUpdatedDateAttribute()
+    {
+        return $this->updated_at->format('d/m/Y H:m');
+    }
+
+    public function test_list_card()
+    {
+        return $this->hasOne(TestListCard::class);
+    }
 }

@@ -13,4 +13,14 @@ class TestListCard extends Model
         'test_list_id',
         'card_id',
     ];
+
+    public function card()
+    {
+        return $this->belongsTo(Card::class);
+    }
+
+    public function test_list()
+    {
+        return $this->belongsTo(TestList::class);
+    }
 }
