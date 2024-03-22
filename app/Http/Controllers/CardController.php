@@ -81,8 +81,13 @@ class CardController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Card $card)
     {
-        //
+        $delete = $this->cardService->delete($card);
+
+        if ($delete['status'])
+            return redirect()->back()->with('success', $delete['message']);
+
+        return redirect()->back()->with('error', $delete['message'])->withInput();
     }
 }

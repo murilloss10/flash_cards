@@ -84,14 +84,20 @@ class CardService
         }
     }
 
-    public function delete(Card $cardToBeDeleted) : string
+    public function delete(Card $cardToBeDeleted) : array
     {
         try {
             $cardToBeDeleted->delete();
 
-            return 'Card deletado com sucesso!';
+            return [
+                'status' => 'success',
+                'message' => 'Card deletado com sucesso!'
+            ];
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
         }
     }
 

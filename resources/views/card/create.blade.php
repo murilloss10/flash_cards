@@ -22,15 +22,15 @@
                         
                         <div class="row g-1">
                             <div class="col-lg-12 col-sm-6 form-floating mb-3">
-                                <input type="text" class="form-control h-100" id="inputTopic" placeholder="Nome do tópico" name="topic" required>
+                                <input type="text" class="form-control h-100" id="inputTopic" placeholder="Nome do tópico" name="topic" value="{{ old('topic') }}" required>
                                 <label for="inputTopic">Digite o tópico</label>
                             </div>
                             <div class="col-lg-12 col-sm-6 form-floating mb-3">
-                                <textarea class="form-control" placeholder="Digite a questão" id="inputQuestion" name="question" required></textarea>
+                                <textarea class="form-control" placeholder="Digite a questão" id="inputQuestion" name="question" required>{{ old('question') }}</textarea>
                                 <label for="inputQuestion">Digite a questão</label>
                             </div>
                             <div class="col-lg-12 col-sm-6 form-floating mb-3">
-                                <textarea class="form-control" placeholder="Digite a resposta da questão" id="inputQuestionAnswer" name="question_answer"></textarea>
+                                <textarea class="form-control" placeholder="Digite a resposta da questão" id="inputQuestionAnswer" name="question_answer">{{ old('question_answer') }}</textarea>
                                 <label for="inputQuestionAnswer">Digite a resposta da questão</label>
                             </div>
                         </div>
