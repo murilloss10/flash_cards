@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->index();
             $table->string('topic', 191);
             $table->mediumText('question');
-            $table->mediumText('question_answer');
+            $table->mediumText('question_answer')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
