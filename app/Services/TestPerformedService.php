@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\TestList;
 use App\Models\TestPerformed;
 use App\Models\User;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use UnexpectedValueException;
 
 class TestPerformedService

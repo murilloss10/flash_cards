@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Models\TestList;
-use Illuminate\Support\Facades\Request;
-use UnexpectedValueException;
+use App\Models\UserTestList;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
+use Exception;
 
 class TestListService
 {
@@ -13,23 +15,37 @@ class TestListService
      */
     private $testList;
 
-    public function __construct(TestList $testList) {
-        $this->testList = $testList;
+    /**
+     * @var UserTestList
+     */
+    private $userTestList;
+
+    public function __construct(TestList $testList, UserTestList $userTestList) {
+        $this->testList     = $testList;
+        $this->userTestList = $userTestList;
     }
 
-    public function create(Request $request) : string
+    public function create(Request $request, $user) : array
     {
         try {
             $data = $this->mountArray($request);
 
             if (!$data)
-                throw new UnexpectedValueException('Valores não correspondem.');
+                throw new Exception('Valores não correspondem.');
 
-            $this->testList->create($data);
+            $newTestList = $this->testList->create($data);
 
-            return 'Lista criada com sucesso!';
+            $this->registerUserTestList((int) $user->id, (string) $newTestList->id);
+
+            return [
+                'status' => 'success',
+                'message' => 'Lista criada com sucesso!'
+            ];
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
         }
     }
 
@@ -40,7 +56,7 @@ class TestListService
 
     public function findById(string $id) : TestList|null
     {
-        return $this->testList->find($id);
+        return $this->testList->where('id', $id)->with('test_list_cards.card')->first();
     }
 
     public function update(Request $request, TestList $testListToBeUpdated) : string
@@ -49,13 +65,19 @@ class TestListService
             $data = $this->mountArray($request);
 
             if (!$data)
-                throw new UnexpectedValueException('Valores não correspondem.');
+                throw new Exception('Valores não correspondem.');
 
             $testListToBeUpdated->update($data);
 
-            return 'Lista atualizada com sucesso!';
+            return [
+                'status' => 'success',
+                'message' => 'Lista atualizada com sucesso!'
+            ];
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
         }
     }
 
@@ -64,9 +86,15 @@ class TestListService
         try {
             $testListToBeDeleted->delete();
 
-            return 'Lista deletada com sucesso!';
+            return [
+                'status' => 'success',
+                'message' => 'Lista deletada com sucesso!'
+            ];
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
         }
     }
 
@@ -80,6 +108,20 @@ class TestListService
             ];
         } catch (\Exception $e) {
             return [];
+        }
+    }
+
+    private function registerUserTestList(int $user_id, string $test_list_id) : bool
+    {
+        try {
+            $this->userTestList->create([
+                'user_id'       => $user_id,
+                'test_list_id'  => $test_list_id,
+            ]);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
         }
     }
 

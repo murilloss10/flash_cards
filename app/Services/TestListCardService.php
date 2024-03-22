@@ -15,7 +15,7 @@ class TestListCardService
         $this->testListCard = $testListCard;
     }
 
-    public function create(int $test_list_id, int $card_id) : string
+    public function create(string $test_list_id, string $card_id) : string
     {
         try {
             $this->testListCard->create([

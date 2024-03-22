@@ -16,4 +16,16 @@ class TestList extends Model
         'color',
         'url_background',
     ];
+
+    public $appends = ['updatedDate'];
+
+    public function getUpdatedDateAttribute()
+    {
+        return $this->updated_at->format('d/m/Y H:m');
+    }
+
+    public function test_list_cards()
+    {
+        return $this->hasMany(TestListCard::class);
+    }
 }
