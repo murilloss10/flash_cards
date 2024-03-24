@@ -59,7 +59,7 @@ class TestListService
         return $this->testList->where('id', $id)->with('test_list_cards.card')->first();
     }
 
-    public function update(Request $request, TestList $testListToBeUpdated) : string
+    public function update(Request $request, TestList $testListToBeUpdated) : array
     {
         try {
             $data = $this->mountArray($request);
@@ -81,7 +81,7 @@ class TestListService
         }
     }
 
-    public function delete(TestList $testListToBeDeleted) : string
+    public function delete(TestList $testListToBeDeleted) : array
     {
         try {
             $testListToBeDeleted->delete();

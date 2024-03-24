@@ -14,7 +14,7 @@
         <div class="container mt-5">
             <div class="row g-2">
                 @foreach ($cards as $card)
-                    <div class="text-decoration-none col-3">
+                    <div class="col-3">
                         <div class="card border border-0 shadow-sm p-0">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
@@ -50,7 +50,7 @@
                                 <p class="text-end m-0" title="Última atualização">
                                     <small class="text-body-secondary align-middle p-0">
                                         <span class="material-symbols-outlined align-text-bottom" style="font-size: 1rem">update</span> 
-                                        {{ $card->updatedDate }}
+                                        {{ $card->UpdatedDate }}
                                     </small>
                                 </p>
                             </div>
