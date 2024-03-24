@@ -24,6 +24,8 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::resource('listas', TestListController::class);
+    Route::get('listas/{lista}/deletar', [TestListController::class, 'destroy'])->name('listas.deletar');
+
     Route::resource('cards', CardController::class);
     Route::get('listas/{list}/cards/criar', [CardController::class, 'create'])->name('cards.criar');
     Route::get('listas/cards/{card}/editar', [CardController::class, 'edit'])->name('cards.editar');

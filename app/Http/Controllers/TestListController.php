@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TestList;
 use App\Services\TestListService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -75,24 +76,35 @@ class TestListController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $list_id)
     {
-        //
+        $list = $this->testListService->findById($list_id);
+        return view('test_list.edit', compact('list'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, TestList $lista)
     {
-        //
+        $store  = $this->testListService->update($request, $lista);
+
+        if ($store['status'])
+            return redirect()->route('listas.index')->with('success', $store['message']);
+
+        return redirect()->route('listas.index')->with('error', $store['message']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(TestList $lista)
     {
-        //
+        $delete  = $this->testListService->delete($lista);
+
+        if ($delete['status'])
+            return redirect()->route('listas.index')->with('success', $delete['message']);
+
+        return redirect()->route('listas.index')->with('error', $delete['message']);
     }
 }

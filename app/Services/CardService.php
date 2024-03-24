@@ -36,6 +36,9 @@ class CardService
 
             $this->testListCardService->create($request->test_list_id, $newCard->id);
 
+            $newCard->test_list_card->test_list->updated_at = $newCard->updated_at;
+            $newCard->push();
+
             return [
                 'status' => 'success',
                 'message' => 'Card criado com sucesso!'
@@ -71,6 +74,9 @@ class CardService
                 throw new Exception('Valores não correspondem.');
 
             $cardToBeUpdated->update($data);
+
+            $cardToBeUpdated->test_list_card->test_list->updated_at = $cardToBeUpdated->updated_at;
+            $cardToBeUpdated->push();
 
             return [
                 'status' => 'success',

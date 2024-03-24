@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,7 @@ class Card extends Model
 
     public function getUpdatedDateAttribute()
     {
-        return $this->updated_at->format('d/m/Y H:m');
+        return $this->updated_at->format('d/m/Y H:i');
     }
 
     public function test_list_card()
