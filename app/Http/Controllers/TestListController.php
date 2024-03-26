@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\TestList;
+use App\Services\TestListCardService;
 use App\Services\TestListService;
+use App\Services\TestPerformedService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,8 +16,22 @@ class TestListController extends Controller
      */
     private $testListService;
 
-    public function __construct(TestListService $testListService) {
-        $this->testListService = $testListService;
+    /**
+     * @var TestListCardService
+     */
+    private $testListCardService;
+
+    /**
+     * @var TestPerformedService
+     */
+    private $testPerformedService;
+
+    public function __construct(TestListService $testListService, 
+                                TestListCardService $testListCardService,
+                                TestPerformedService $testPerformedService) {
+        $this->testListService      = $testListService;
+        $this->testListCardService  = $testListCardService;
+        $this->testPerformedService = $testPerformedService;
     }
 
     /**
@@ -106,5 +122,23 @@ class TestListController extends Controller
             return redirect()->route('listas.index')->with('success', $delete['message']);
 
         return redirect()->route('listas.index')->with('error', $delete['message']);
+    }
+
+    public function findCards(string $test_list_id)
+    {
+        $cards = $this->testListCardService->findCards($test_list_id);
+
+        return $cards;
+    }
+
+    public function saveTestPerformed(Request $request)
+    {
+        $user = Auth::user();
+        $save = $this->testPerformedService->create($request, $user);
+
+        if ($save['status'])
+            return redirect()->route('listas.index')->with('success', $save['message']);
+
+        return redirect()->route('listas.index')->with('error', $save['message']);
     }
 }

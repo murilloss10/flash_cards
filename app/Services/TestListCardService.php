@@ -28,4 +28,23 @@ class TestListCardService
             return $e->getMessage();
         }
     }
+
+    public function findCards(string $test_list_id)
+    {
+        $test_list_card = $this->testListCard->where('test_list_id', $test_list_id)->with('card')->get()->toArray();
+        $cards  = [];
+
+        foreach ($test_list_card as $key => $value) {
+            if ($value['card']) {
+                $key++;
+                array_push($cards, [
+                    $key => $value['card']
+                ]);
+            }
+        }
+
+        shuffle($cards);
+
+        return json_encode($cards);
+    }
 }

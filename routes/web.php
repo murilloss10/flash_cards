@@ -25,6 +25,8 @@ Route::middleware([
 ])->group(function () {
     Route::resource('listas', TestListController::class);
     Route::get('listas/{lista}/deletar', [TestListController::class, 'destroy'])->name('listas.deletar');
+    Route::get('listas/{lista}/cards', [TestListController::class, 'findCards'])->name('listas.cards');
+    Route::post('listas/teste/finalizar', [TestListController::class, 'saveTestPerformed'])->name('listas.teste.finalizar');
 
     Route::resource('cards', CardController::class);
     Route::get('listas/{list}/cards/criar', [CardController::class, 'create'])->name('cards.criar');
