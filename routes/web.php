@@ -14,7 +14,8 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $user = Auth::user();
+        return view('dashboard', compact('user'));
     })->name('dashboard');
 });
 
